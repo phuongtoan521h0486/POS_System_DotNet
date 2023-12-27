@@ -1,0 +1,613 @@
+﻿@model POS_System_DotNet.Models.PageModel.Step2Model
+
+@{
+    ViewData["Title"] = "Step2";
+}
+
+<h1>Step2</h1>
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/checkout.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+        .table thead th {
+            border-bottom: 1px solid #eeeeee;
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <title>Multi-Step Form</title>
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <div id="multi-step-form-container">
+                <!-- Form Steps / Progress Bar -->
+                <ul class="form-stepper form-stepper-horizontal text-center mx-auto pl-0">
+                    <!-- Step 1 -->
+                    <li class="form-stepper-active text-center form-stepper-list" step="1">
+                        <a class="mx-2">
+                            <span class="form-stepper-circle">
+                                <span>1</span>
+                            </span>
+                            <div class="label">Enter Phone Number</div>
+                        </a>
+                    </li>
+                    <!-- Step 2 -->
+                    <li class="form-stepper-active text-center form-stepper-list" step="2">
+                        <a class="mx-2">
+                            <span class="form-stepper-circle">
+                                <span>2</span>
+                            </span>
+                            <div class="label">Checkout</div>
+                        </a>
+                    </li>
+                    <!-- Step 3 -->
+                    <li class="form-stepper-unfinished text-center form-stepper-list" step="3">
+                        <a class="mx-2">
+                            <span class="form-stepper-circle text-muted">
+                                <span>3</span>
+                            </span>
+                            <div class="label text-muted">Invoice</div>
+                        </a>
+                    </li>
+                </ul>
+                <div class="container mx-auto px-4">
+                    <!-- Search Box with Barcode Button -->
+                    <div class="flex items-center justify-center pt-6">
+                        <div class="relative flex-grow flex items-center bg-white rounded-full shadow-xl">
+                            <input class="w-full py-4 px-6 text-gray-700 leading-tight focus:outline-none rounded-l-full" id="search"
+                                   name="keyword" oninput="searchProducts()" placeholder="Search" type="text" />
+                            <button class="bg-blue-500 text-white rounded-full p-2 hover:bg-blue-400 focus:outline-none w-12 h-12 flex items-center justify-center"
+                                    id="searchButton">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <div class="absolute w-full rounded-b-lg shadow-lg bg-white mt-1" id="dropdown"
+                                 style="display: none; top: 100%; left: 0; z-index: 10;">
+                                <ul id="searchResults">
+                                    <!-- Product 1 -->
+                                    <li class="flex items-center px-4 py-2 hover:bg-gray-100">
+                                        <img alt="Product 1 image" class="rounded-full mr-3" src="https://placehold.co/50x50" />
+                                        <div class="flex-grow">
+                                            <p class="font-semibold">
+                                                Product 1
+                                            </p>
+                                            <p class="text-gray-500">
+                                                $10.00
+                                            </p>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button id="barcodeButton"
+                                class="bg-blue-500 text-white rounded-full p-3 hover:bg-blue-400 focus:outline-none flex items-center justify-center ml-2"
+                                onclick="openBarcodePopup()">
+                            <i class="fas fa-barcode"></i>
+                        </button>
+                    </div>
+
+                    <!-- Barcode Popup -->
+                    <div id="barcodePopup" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden"
+                         style="z-index: 9999;">
+                        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+                            <div class="mt-3 text-center">
+                                <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                                    <i class="fas fa-barcode text-green-600"></i>
+                                </div>
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">Barcode Search</h3>
+                                <div class="mt-2 px-7 py-3">
+                                    <label>
+                                        <input id="barcodeInput" name="barcode"
+                                               class="mt-1 px-3 py-2 bg-white border shadow-sm border-gray-300 placeholder-gray-400 focus:outline-none focus:border-blue-500 block w-full rounded-md sm:text-sm focus:ring-blue-500"
+                                               placeholder="Enter barcode" type="text">
+                                    </label>
+                                </div>
+                                <div class="items-center px-4 py-3">
+                                    <button id="searchBarcode"
+                                            class="px-4 py-2 bg-green-500 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-300">
+                                        Search
+                                    </button>
+                                </div>
+                                <div class="items-center px-4 py-3">
+                                    <button onclick="closeBarcodePopup()"
+                                            class="px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rest of the form goes here... -->
+                </div>
+                <!-- Step Wise Form Content -->
+                <form class="mt-5" action="/cart/step-2" id="userAccountSetupForm" name="userAccountSetupForm" method="POST">
+                    <!-- Step 2 Content, default hidden on page load. -->
+                    <section id="step-2" class="form-step">
+
+                        <div class="container py-5">
+                            <div class="row d-flex justify-content-center my-4">
+                                <div class="col-md-8">
+                                    <div class="card mb-4">
+                                        <div class="card-header py-3">
+                                            <h5 class="mb-0">Cart items @Model.cartItem.Count()</h5>
+                                        </div>
+                                        <div >
+                                            @foreach (var item in Model.cartItem)
+                                            {
+                                                <div class="card-body" data-product-id="@item.product.ProductId">
+                                                    <!-- Single item -->
+                                                    <div class="row">
+                                                        <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                                                            <!-- Image -->
+                                                            <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
+                                                                @if (item.product.Picture != null)
+                                                                {
+                                                                    <img class="w-100"
+                                                                         src="data:image/jpeg;base64,@Convert.ToBase64String(item.product.Picture)"
+                                                                         alt="Product Image" />
+                                                                }
+                                                               
+
+
+                                                                <a href="#!">
+                                                                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
+                                                                </a>
+                                                            </div>
+                                                            <!-- Image -->
+                                                        </div>
+
+                                                        <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                                                            <!-- Data -->
+                                                            <p><strong>@item.product.ProductName</strong></p>
+                                                            <p>Category: <span>@item.product.Category</span></p>
+                                                            <p>
+                                                                Price: <span id="Price-@item.product.ProductId"
+                                                                            >@item.product.RetailPrice.ToString("C")</span>
+                                                            </p>
+
+                                                            <!-- Button with Trash Icon -->
+                                                            <button type="button" class="btn btn-primary btn-sm remove-item-button me-1 mb-2"
+                                                                    data-mdb-toggle="tooltip" title="Remove item"
+                                                                    style="background-color: #3c71ca; color: #ffffff; border-radius: 4px; transition: background-color 0.3s;"
+                                                                    onmouseover="this.style.backgroundColor='#2b5aa5'"
+                                                                    onmouseout="this.style.backgroundColor='#3c71ca'">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+
+
+                                                            <!-- Data -->
+                                                        </div>
+
+                                                        <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                                                            <!-- Quantity -->
+                                                            <div class="d-flex mb-4" style="max-width: 300px">
+                                                                <i class="btn btn-primary px-3 me-2"
+                                                                   onclick="updateQuantity(-1,@item.product.ProductId)">
+                                                                    <i class="fas fa-minus"></i>
+                                                                </i>
+
+                                                                <div class="form-outline" style="display: flex; justify-content: center">
+                                                                   
+                                                                    <input id="quantity-@item.product.ProductId" min="1" name="quantity"
+                                                                           value="@item.Quantity" type="number" class="form-control" />
+                                                                </div>
+
+                                                                <i class="btn btn-primary px-3 ms-2"
+                                                                   onclick="updateQuantity(1,@item.product.ProductId)">
+                                                                    <i class="fas fa-plus"></i>
+                                                                </i>
+                                                            </div>
+                                                            <!-- Quantity -->
+                                                            <!-- Price -->
+                                                            <p class="text-start text-md-center">
+                                                                <strong>
+                                                                    Total Price: <span id="totalPrice-@item.product.ProductId">
+                                                                        @((item.product.RetailPrice * item.Quantity).ToString("C"))
+                                                                    </span>
+                                                                </strong>
+                                                            </p>
+                                                            <!-- Price -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- Single item -->
+
+                                                    <hr class="my-4" />
+                                                </div>
+                                            }
+                                            
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card mb-4">
+                                        <div class="card-header py-3">
+                                            <h5 class="mb-0">Summary</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="list-group list-group-flush">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                                                    Total Amount
+                                                    <span id="totalAmount">@(Model.cartService.calculateTotalAmount(Model.cartItem).ToString("C"))</span>
+                                                </li>
+
+                                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                                                    Total Quantity
+                                                    <span id="totalQuantity">@Model.cartService.calculateTotalQuantity(Model.cartItem)</span>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                                    <div class="d-flex w-100">
+                                                        <label for="givenMoney" class="mb-0 align-self-center me-2">Given Money</label>
+                                                        <div class="flex-fill text-end">
+                                                            <input type="text" id="givenMoney" name="givenMoney" class="form-control"
+                                                                   placeholder="Enter Given Money">
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                                    <div>
+                                                        <strong>Excess Money</strong>
+                                                    </div>
+                                                    <span id="excessMoney"><strong>$0.00</strong></span>
+                                                </li>
+                                            </ul>
+
+                                            <button type="button" step_number="3"
+                                                    style="display: block; width: 100%; padding: 10px; font-size: 1.25rem; text-align: center; background-color: #3a82f6; color: #ffffff; border-radius: 8px; transition: background-color 0.3s;"
+                                                    onmouseover="this.style.backgroundColor='#1d4ed8'"
+                                                    onmouseout="this.style.backgroundColor='#3a82f6'" onclick="checkAndSubmit()">
+                                                Go to checkout
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openBarcodePopup() {
+            document.getElementById('barcodePopup').style.display = 'block';
+        }
+
+        function closeBarcodePopup() {
+            document.getElementById('barcodePopup').style.display = 'none';
+        }
+        $(document).ready(function () {
+            $('.remove-item-button').click(function () {
+                var cardBody = $(this).closest('.card-body');
+                var productId = cardBody.data('product-id');
+
+                cardBody.remove();
+
+                // Send an AJAX request to update the cart on the server
+                $.ajax({
+                    type: 'POST',
+                    url: '/cart/remove',
+                    contentType: 'application/json',
+                    data: JSON.stringify(productId),
+                    success: function (response) {
+                        console.log('Item removed from cart successfully');
+
+                        recalculate();
+                    },
+                    error: function (error) {
+                        console.error('Error removing item from cart:', error);
+                    }
+                });
+
+
+            });
+
+            function recalculate() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/cart/info',
+                    contentType: 'application/json',
+                    success: function (response) {
+                        var totalAmount = response.totalAmount;
+                        var formattedTotalAmount = totalAmount.toLocaleString('en-US', {
+                            style: 'currency',
+                            currency: 'USD'
+                        });
+                        var totalQuantity = response.totalQuantity;
+
+                        // Update the displayed total amount and quantity
+                        $('#totalAmount').text(formattedTotalAmount);
+                        $('#totalQuantity').text(totalQuantity);
+                    },
+                    error: function (error) {
+                        // Optionally handle the error response
+                        console.error('Error fetching cart information:', error);
+                    }
+                });
+            }
+        });
+    </script>
+    <script>
+        function updateQuantity(action, productId) {
+            var quantityElement = $('#quantity-' + productId);
+            var currentQuantity = parseInt(quantityElement.val());
+
+            if (action === 1) {
+                quantityElement.val(currentQuantity + 1);
+            } else if (action === -1 && currentQuantity > 1) {
+                quantityElement.val(currentQuantity - 1);
+            }
+
+            var priceElement = $('#Price-' + productId);
+            var priceTextWithCurrency = priceElement.text().trim();
+            var priceText = priceTextWithCurrency.replace(/[^\d.]/g, '');
+            var totalPriceElement = $('#totalPrice-' + productId);
+
+
+            var newQuantity = parseInt(quantityElement.val());
+            var price = parseFloat(priceText);
+            var newTotalPrice = price * newQuantity;
+
+
+
+            totalPriceElement.text(newTotalPrice.toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }));
+            updateCart(productId, quantityElement.val());
+        }
+
+        function recalculate() {
+            $.ajax({
+                type: 'GET',
+                url: '/cart/info',
+                contentType: 'application/json',
+                success: function (response) {
+                    var totalAmount = response.totalAmount;
+                    var formattedTotalAmount = totalAmount.toLocaleString('en-US', {
+                        style: 'currency',
+                        currency: 'USD'
+                    });
+                    var totalQuantity = response.totalQuantity;
+
+                    $('#totalAmount').text(formattedTotalAmount);
+                    $('#totalQuantity').text(totalQuantity);
+
+                    console.log('Recalculation complete');
+                },
+                error: function (error) {
+                    console.error('Error fetching cart information:', error);
+                }
+            });
+        }
+        function updateCart(productId, newQuantity) {
+            $.ajax({
+                type: 'POST',
+                url: '/cart/update',
+                contentType: 'application/json',
+                data: JSON.stringify({ productId: parseInt(productId), quantity: parseInt(newQuantity) }),
+                success: function (response) {
+                    console.log('Cart updated successfully');
+                    recalculate();
+                },
+                error: function (error) {
+                    console.error('Error updating cart:', error);
+                }
+            });
+
+        }
+
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#search').on('input', function () {
+                performSearch();
+            });
+
+            $('#searchButton').on('click', function () {
+                performSearch();
+            });
+
+            function performSearch() {
+                var keyword = $('#search').val().trim();
+
+                // Send AJAX request to the server
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/search',
+                    data: { keyword: keyword },
+                    success: function (data) {
+                        console.log(data);
+                    },
+                    error: function (error) {
+                        console.error('Error during search:', error);
+                    }
+                });
+            }
+        });
+
+    </script>
+    <script>
+        function searchProducts() {
+            var keyword = $('#search').val();
+
+            // Perform AJAX request to fetch product data based on the keyword
+            $.ajax({
+                type: 'GET',
+                url: '/api/search',
+                data: { keyword: keyword },
+                success: function (data) {
+                    updateSearchResults(data);
+                },
+                error: function (error) {
+                    console.error('Error fetching search results:', error);
+                }
+            });
+        }
+
+        function updateSearchResults(products) {
+            var dropdown = $('#dropdown');
+            var resultsList = $('#searchResults');
+
+            resultsList.empty();
+
+            for (var i = 0; i < products.length; i++) {
+                var product = products[i];
+                var listItem = $('<li class="flex items-center px-4 py-2 hover:bg-gray-100" id=' + product.productId + '></li>');
+
+                listItem.append('<img alt="' + product.productName + ' image" class="rounded-full mr-3" src="data:image/png;base64,' + product.picture + '" width="50" height="50"/>');
+                listItem.append('<div class="flex-grow"><p class="font-semibold">' + product.productName + '</p><p class="text-gray-500">' + product.retailPrice.toLocaleString('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }) + '</p></div>');
+
+                listItem.click((function (productId) {
+                    return function () {
+                        addToCart(productId);
+                        updateCartUI();
+
+                        dropdown.hide();
+
+                        $('#search').val('');
+
+                        location.reload(false);
+                    };
+                })(product.productId));
+
+                resultsList.append(listItem);
+            }
+
+            dropdown.show();
+        }
+
+        function addToCart(productId) {
+            // Perform AJAX request to add the product to the cart on the server
+
+            var item = {
+                productId: productId,
+                quantity: 1
+            };
+            $.ajax({
+                type: 'POST',
+                url: '/cart/add',
+                contentType: 'application/json',
+                data: JSON.stringify(item),
+                success: function (response) {
+                    console.log('Product added to cart successfully');
+                    updateCartUI();
+                },
+                error: function (error) {
+                    console.error('Error adding product to cart:', error);
+                }
+            });
+        }
+
+        function updateCartUI() {
+            // Perform AJAX request to fetch the updated cart information from the server
+            $.ajax({
+                type: 'GET',
+                url: '/api/getCart',
+                success: function (cart) {
+                    console.log('Updating cart UI with new cart data:', cart);
+                },
+                error: function (error) {
+                    console.error('Error fetching cart information:', error);
+                }
+            });
+        }
+
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#searchBarcode').on('click', function () {
+                var barcode = $('#barcodeInput').val();
+
+                // Perform AJAX request to check if barcode exists
+                $.ajax({
+                    type: 'GET',
+                    url: '/api/checkBarcode',
+                    data: { barcode: barcode },
+                    success: function (response) {
+                        if (response) {
+                            addToCart(response.productId);
+                            $('#barcodePopup').hide();
+                            location.reload(false);
+                        } else {
+                            alert('Product not found for the entered barcode.');
+                        }
+                    },
+                    error: function (xhr) {
+                        if (xhr.status === 404) {
+                            alert('Product not found for the entered barcode.');
+                        } else {
+                            console.error('Error checking barcode:', xhr.statusText);
+                        }
+                    }
+                });
+            });
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#givenMoney').keypress(function (e) {
+                // Check if the pressed key is "Enter" (key code 13)
+                if (e.which === 13) {
+                    var givenMoney = parseFloat($(this).val());
+
+                    if (!isNaN(givenMoney)) {
+                        var totalAmount = parseFloat($('#totalAmount').text().replace('$', '').replace(',', ''));
+                        var excessMoney = givenMoney - totalAmount;
+
+                        $('#excessMoney').html('<strong>' + formatCurrency(excessMoney) + '</strong>');
+                    } else {
+                        alert('Please enter a valid number for Given Money.');
+                    }
+                }
+            });
+
+            function formatCurrency(amount) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(amount);
+            }
+        });
+    </script>
+    <script>
+        function checkAndSubmit() {
+            var givenMoney = parseFloat($('#givenMoney').val().replace('$', '').replace(',', ''));
+
+            var totalAmount = parseFloat($('#totalAmount').text().replace('$', '').replace(',', ''));
+
+            if (!isNaN(givenMoney)) {
+                if (givenMoney < totalAmount) {
+                    alert('Given money must be equal or greater than the total amount.');
+                } else {
+                    document.getElementById('userAccountSetupForm').submit();
+                }
+            } else {
+                alert('Please enter a valid number for Given Money.');
+            }
+        }
+    </script>
+</body>
+
+</html>

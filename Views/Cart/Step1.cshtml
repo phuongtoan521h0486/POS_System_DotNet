@@ -1,0 +1,243 @@
+﻿@model POS_System_DotNet.Models.Account.Account
+
+@{
+    ViewData["Title"] = "Step1";
+}
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/checkout.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/7.0.0/mdb.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    </link>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+    <style>
+        .table thead th {
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+    <title>Multi-Step Form</title>
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <div id="multi-step-form-container">
+                <!-- Form Steps / Progress Bar -->
+                <ul class="form-stepper form-stepper-horizontal text-center mx-auto pl-0">
+                    <!-- Step 1 -->
+                    <li class="form-stepper-active text-center form-stepper-list" step="1">
+                        <a class="mx-2">
+                            <span class="form-stepper-circle">
+                                <span>1</span>
+                            </span>
+                            <div class="label">Enter Phone Number</div>
+                        </a>
+                    </li>
+                    <!-- Step 2 -->
+                    <li class="form-stepper-unfinished text-center form-stepper-list" step="2">
+                        <a class="mx-2">
+                            <span class="form-stepper-circle text-muted">
+                                <span>2</span>
+                            </span>
+                            <div class="label text-muted">Checkout</div>
+                        </a>
+                    </li>
+                    <!-- Step 3 -->
+                    <li class="form-stepper-unfinished text-center form-stepper-list" step="3">
+                        <a class="mx-2">
+                            <span class="form-stepper-circle text-muted">
+                                <span>3</span>
+                            </span>
+                            <div class="label text-muted">Invoice</div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- Step Wise Form Content -->
+                <form action="/cart/step-1" id="userAccountSetupForm" name="userAccountSetupForm" method="POST"
+                      onsubmit="return checkCustomerBeforeSubmit()">
+                    <!-- Step 1 Content -->
+                    <section id="step-1" class="form-step">
+                        <h1 class="text-2xl font-medium mb-4 text-center">Enter customer's phone number</h1>
+                        <!-- Step 1 input fields -->
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <div class="form-group">
+
+                                    <input type="tel" class="form-control" id="phone" placeholder="Enter phone" name="phone">
+                                    <div id="customer-info" class="mt-2 p-4 text-lg text-gray-700 bg-gray-100 rounded-lg">
+                                        <span>Name: </span>
+                                        <br>
+                                        <span>Adress: </span>
+                                    </div>
+                                </div>
+
+                                <div class="flex justify-center mt-6">
+                                    <button id="nextButton" style="display: none;"
+                                            class="btn-navigate-form-step bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                            type="submit" step_number="2">
+                                        Next
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div id="new-customer-popup" class="hidden fixed inset-0 bg-black bg-opacity-50 overflow-y-auto h-full w-full">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3 text-center">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">New Customer</h3>
+                <div class="mt-2 px-7 py-3">
+                    <input type="text" id="full-name"
+                           class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 mb-3"
+                           placeholder="Full Name" name="full_name">
+                    <input id="address"
+                           class="form-input w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                           placeholder="Address" name="address">
+                </div>
+                <div class="flex justify-center items-center px-4 py-3">
+                    <button id="cancel-btn"
+                            class="px-4 py-2 bg-gray-200 text-black rounded-md mr-3 focus:outline-none">
+                        Cancel
+                    </button>
+                    <button id="create-btn" class="px-4 py-2 bg-blue-500 text-white rounded-md focus:outline-none">Create</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('cancel-btn').addEventListener('click', function () {
+            document.getElementById('new-customer-popup').classList.add('hidden');
+        });
+
+        document.getElementById('create-btn').addEventListener('click', function () {
+            const fullName = document.getElementById('full-name').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+
+            // Check if both full name and address are provided
+            if (fullName && address && phone) {
+                createNewCustomer(phone, fullName, address);
+            } else {
+                alert("Please provide both full name and address.");
+            }
+        });
+
+        const phoneInput = document.getElementById('phone');
+        const nextButton = document.getElementById('nextButton');
+
+        phoneInput.addEventListener('keyup', function (event) {
+            const phoneNumber = phoneInput.value.trim();
+
+            nextButton.disabled = phoneNumber === '';
+
+            if (event.key === 'Enter') {
+                checkCustomer(event);
+            }
+        });
+
+        async function checkCustomer(event) {
+            event.preventDefault();
+
+            const phoneNumber = phoneInput.value.trim();
+
+            // Send an AJAX request to check if the customer exists
+            try {
+                const response = await fetch(`/customer/check?phone=${phoneNumber}`);
+
+                if (!response.ok) {
+                    // Customer not found
+                    console.log("Customer not found");
+                    nextButton.style.display = 'none';
+                    document.getElementById('new-customer-popup').classList.remove('hidden');
+                    return;
+                }
+
+                const customerInfo = await response.json();
+
+                if (customerInfo) {
+                    document.getElementById('customer-info').innerHTML = `
+                <span>Name: ${customerInfo.name}</span><br>
+                <span>Address: ${customerInfo.address}</span>
+              `;
+                    nextButton.style.display = 'block';
+                } else {
+                    console.error("Unexpected JSON input:", response);
+                }
+
+            } catch (error) {
+                console.error("Error during customer check:", error);
+            }
+        }
+
+
+        function checkCustomerBeforeSubmit() {
+            return nextButton.style.display !== 'none';
+        }
+
+        async function createNewCustomer(phone, fullName, address) {
+            console.log("Phone:", phone);
+            console.log("Full Name:", fullName);
+            console.log("Address:", address);
+
+            var customer = {
+                phoneNumber: phone,
+                name: fullName,
+                address: address
+            };
+
+            try {
+                const response = await fetch('/Customer/Create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(customer),
+                });
+
+                if (response.ok) {
+                    // Customer created successfully
+                    console.log("New customer created successfully!");
+                } else {
+                    const errorResponse = await response.json(); // Parse JSON response
+
+                    if (errorResponse && errorResponse.error) {
+                        alert(`Error: ${errorResponse.error}`);
+                    } else {
+                        alert("Failed to create new customer. Please try again.");
+                    }
+                }
+            } catch (error) {
+                console.error("Error during customer creation:", error);
+                alert("Error during customer creation. Please try again.");
+            } finally {
+                document.getElementById('new-customer-popup').classList.add('hidden');
+            }
+        }
+
+
+    </script>
+
+
+
+
+
+</body>
+
+</html>

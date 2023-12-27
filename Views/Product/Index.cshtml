@@ -1,0 +1,351 @@
+﻿@model IEnumerable<POS_System_DotNet.Models.Product.Product>
+
+@{
+    ViewData["Title"] = "Index";
+   
+}
+
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Products Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="/css/indexProduct.css"/>
+    <script src="/indexProductScript.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+
+    <link rel="stylesheet" href="/css/Chart.min.css">
+
+    <link rel="stylesheet" href="/css/perfect-scrollbar.css">
+    <link rel="stylesheet" href="/css/app.css">
+</head>
+
+<body>
+    <div id="app">
+        <!--Main content-->
+        <div id="sidebar" class='active' th:fragment="sidebar">
+            <!--sidebar-->
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header">
+                    <img src="/images/logo.png" alt="" srcset="" style="width: 195px; height: 195px; border-radius: 50%;">
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        <li class='sidebar-title'>Main Menu</li>
+                        <li class="sidebar-item ">
+                            <a href="/user/dashboard" class='sidebar-link'>
+                                <i data-feather="trending-up" width="20"></i>
+                                <span>Dashboard</span>
+                            </a>
+
+                        </li>
+
+                        <li class="sidebar-item ">
+                            <a href="/user/profile" class='sidebar-link'>
+                                <i data-feather="user" width="20"></i>
+                                <span>Profile</span>
+                            </a>
+
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i data-feather="package" width="20"></i>
+                                <span>Product</span>
+                            </a>
+
+                            <ul class="submenu ">
+                                <li>
+                                    <a href="/product">Product Management</a>
+                                </li>
+                                <li>
+                                    <a href="/product/add">Add Product</a>
+                                </li>
+                            </ul>
+
+                        </li>
+
+
+                            <li class="sidebar-item  has-sub">
+                                <a href="#" class='sidebar-link'>
+                                    <i data-feather="layers" width="20"></i>
+                                    <span>Staff</span>
+                                </a>
+
+                                <ul class="submenu ">
+
+                                    <li>
+                                        <a href="/user">Staff Management</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="/user/add">Add Staff</a>
+                                    </li>
+
+                                </ul>
+
+                            </li>
+                        
+
+                        
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i data-feather="users" width="20"></i>
+                                <span>Customer</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li>
+                                    <a href="/customer">Customer Management</a>
+                                </li>
+                                <li>
+                                    <a href="#">Search For Customer</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="sidebar-item  ">
+                            <a href="/" class='sidebar-link'>
+                                <i data-feather="shopping-bag" width="20"></i>
+                                <span>POS</span>
+                            </a>
+
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="/logout" class='sidebar-link'>
+                                <i data-feather="log-out" width="20"></i>
+                                <span>Logout</span>
+                            </a>
+
+                        </li>
+
+                    </ul>
+                </div>
+                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+            </div>
+        </div>
+        <div id="main">
+            <!--Content id-->
+            <nav class="navbar navbar-header navbar-expand navbar-light" th:fragment="header">
+                <!--header-->
+                <a class="sidebar-toggler" href="#"><span class="navbar-toggler-icon"></span></a>
+                <button class="btn navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav d-flex align-items-center navbar-light ms-auto">
+                        <li class="dropdown">
+                            <a href="#" data-bs-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                                <div class="avatar me-1">
+                                    <img src="" alt="" srcset="">
+                                </div>
+                                <div class="d-none d-md-block d-lg-inline-block">Hi User</div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#"><i data-feather="user"></i> Account</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#"><i data-feather="log-out"></i> Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="main-content container-fluid">
+                <section class="dashboard-light">
+                    <div class="min-h-screen text-gray-900">
+                        <main>
+                            <div class="flex flex-col">
+                                <div class="overflow-x-auto sm:-mx-6 lg:-mx-8">
+                                    <div class="py-4 inline-block min-w-full sm:px-6 lg:px-8">
+                                        <div class="overflow-hidden">
+                                            <div class="flex items-center justify-between pb-4">
+                                                <h1 class="text-3xl font-semibold text-gray-800">
+                                                    Products
+                                                </h1>
+                                                <div class="text-2xl font-semibold text-gray-500">@Model.Count()</div>
+                                                <div class="flex items-center">
+                                                    @if (ViewBag.Role == "Admin")
+                                                    {
+                                                        <a href="/Product/Add"
+                                                           class="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                                            Add product
+                                                        </a>
+                                                    }
+                                                    
+                                                </div>
+                                            </div>
+                                            <table class="min-w-full text-center">
+                                                <thead class="border-b bg-gray-800 text-white">
+                                                    <tr>
+                                                        <th class="text-sm font-medium px-6 py-4" scope="col">
+                                                            PRODUCT
+                                                        </th>
+                                                        <th class="text-sm font-medium px-6 py-4" scope="col">
+                                                            BARCODE
+                                                        </th>
+                                                        <th class="text-sm font-medium px-6 py-4" scope="col">
+                                                            CATEGORY
+                                                        </th>
+
+                                                        @if (ViewBag.Role == "Admin")
+                                                        {
+                                                            <th class="text-sm font-medium px-6 py-4" scope="col">
+                                                                IMPORT PRICE
+                                                            </th>
+                                                        }
+
+                                                        
+                                                        <th class="text-sm font-medium px-6 py-4" scope="col">
+                                                            RETAIL PRICE
+                                                        </th>
+                                                        @if (ViewBag.Role == "Admin")
+                                                        {
+                                                            <th class="text-sm font-medium px-6 py-4" scope="col">
+                                                                EDIT
+                                                            </th>
+
+                                                            <th class="text-sm font-medium px-6 py-4" scope="col">
+                                                                DELETE
+                                                            </th>
+                                                        }
+                                                        
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                 @foreach (var product in Model)
+                                                {
+                                                    <tr class="bg-white border-b" >
+                                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                            <div class="flex items-center">
+                                                                <div class="flex-shrink-0 h-10 w-10">
+                                                                        @if(product.Picture != null)
+                                                                        {
+                                                                            <img alt="Product Image" class="h-10 w-10 rounded-full"
+                                                                                 src="data:image/png;base64,@Convert.ToBase64String(product.Picture)" height="40"
+                                                                                 width="40" />
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <img alt="Product Image" class="h-10 w-10 rounded-full"
+                                                                                 src="/images/default-product-image.png" height="40" asp-append-version="true"
+                                                                                 width="40" />                                                              
+                                                                        }
+                                                                </div>
+                                                                <div class="ml-4">
+                                                                    <div class="text-sm font-medium text-gray-900" >@product.ProductName</div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">@product.Barcode</td>
+                                                        <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">@product.Category</td>
+                                                            @if (ViewBag.Role == "Admin")
+                                                            {
+                                                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">@product.ImportPrice.ToString("C")</td>
+                                                            }
+                                                            
+
+                                                            <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">@product.RetailPrice.ToString("C")</td>
+                                                            @if (ViewBag.Role == "Admin")
+                                                            {
+                                                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                                    <a class="text-indigo-600 hover:text-indigo-900"
+                                                                       href="/Product/Edit/@product.ProductId">
+                                                                        Edit
+                                                                    </a>
+                                                                </td>
+                                                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                                    <a href="#deleteProductModal-@product.ProductId" class="delete" data-toggle="modal">
+                                                                        <i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>
+                                                                    </a>
+                                                                </td>
+                                                            }
+                                                            
+                                                    </tr>
+                                                }
+                                                    <!-- Repeat for each product -->
+                                                    <!-- ... -->
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!--      </div>-->
+                        </main>
+                    </div>
+                    @foreach (var product in Model)
+                    {
+                    <!-- Delete Modal HTML -->
+                    <div  id="deleteProductModal-@product.ProductId" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form action="/Product/Delete/@product.ProductId" method="post">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Delete Product</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Are you sure you want to delete these Records?</p>
+                                        <p class="text-warning">
+                                            <small>This action cannot be undone.</small>
+                                        </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+                                        <input type="submit"
+                                               style="background-color: #dc3545; color: #fff; border-color: #dc3545; padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s;"
+                                               value="Delete" onmouseover="this.style.backgroundColor='#c82333'"
+                                               onmouseout="this.style.backgroundColor='#dc3545'" />
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    }
+                </section>
+            </div>
+
+            <footer th:fragment="footer">
+                <!--footer-->
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2023 &copy; THD POS</p>
+                    </div>
+                    <div class="float-end">
+                        <p>Developed <span class='text-danger'><i data-feather="heart"></i></span> by <a href="#">GTV Team</a></p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="/js/feather.min.js"></script>
+    <script src="/js/perfect-scrollbar.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/Chart.min.js"></script>
+    <script src="/js/apexcharts.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>

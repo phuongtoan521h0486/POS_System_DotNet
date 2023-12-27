@@ -1,0 +1,403 @@
+﻿@model POS_System_DotNet.Models.Customer.CustomerPageModel;
+
+@{
+    ViewData["Title"] = "Index";
+}
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/css/bootstrap.css">
+
+        <link rel="stylesheet" href="/css/Chart.min.css">
+
+        <link rel="stylesheet" href="/css/perfect-scrollbar.css">
+        <link rel="stylesheet" href="/css/app.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Bootstrap JS (popper.js and bootstrap.js) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <!--Main content-->
+        <div id="sidebar" class='active' th:fragment="sidebar">
+            <!--sidebar-->
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header">
+                    <img src="/images/logo.png" alt="" srcset=""
+                         style="width: 195px; height: 195px; border-radius: 50%;">
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        <li class='sidebar-title'>Main Menu</li>
+                        <li class="sidebar-item ">
+                            <a href="/user/dashboard" class='sidebar-link'>
+                                <i data-feather="trending-up" width="20"></i>
+                                <span>Dashboard</span>
+                            </a>
+
+                        </li>
+
+                        <li class="sidebar-item ">
+                            <a href="/user/profile" class='sidebar-link'>
+                                <i data-feather="user" width="20"></i>
+                                <span>Profile</span>
+                            </a>
+
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i data-feather="package" width="20"></i>
+                                <span>Product</span>
+                            </a>
+
+                            <ul class="submenu ">
+                                <li>
+                                    <a href="/product">Product Management</a>
+                                </li>
+                                <li>
+                                    <a href="/product/add">Add Product</a>
+                                </li>
+                            </ul>
+
+                        </li>
+
+
+
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i data-feather="layers" width="20"></i>
+                                <span>Staff</span>
+                            </a>
+
+                            <ul class="submenu ">
+
+                                <li>
+                                    <a href="/user">Staff Management</a>
+                                </li>
+
+                                <li>
+                                    <a href="/user/add">Add Staff</a>
+                                </li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i data-feather="users" width="20"></i>
+                                <span>Customer</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li>
+                                    <a href="/customer">Customer Management</a>
+                                </li>
+                                <li>
+                                    <a href="#">Search For Customer</a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <li class="sidebar-item  ">
+                            <a href="/" class='sidebar-link'>
+                                <i data-feather="shopping-bag" width="20"></i>
+                                <span>POS</span>
+                            </a>
+
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="/logout" class='sidebar-link'>
+                                <i data-feather="log-out" width="20"></i>
+                                <span>Logout</span>
+                            </a>
+
+                        </li>
+
+                    </ul>
+                </div>
+                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+            </div>
+        </div>
+        <div id="main">
+            <!--Content id-->
+            <nav class="navbar navbar-header navbar-expand navbar-light" th:fragment="header">
+                <!--header-->
+                <a class="sidebar-toggler" href="#"><span class="navbar-toggler-icon"></span></a>
+                <button class="btn navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav d-flex align-items-center navbar-light ms-auto">
+                        <li class="dropdown">
+                            <a href="#" data-bs-toggle="dropdown"
+                               class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                                <div class="avatar me-1">
+                                    <img src="" alt="" srcset="">
+                                </div>
+                                <div class="d-none d-md-block d-lg-inline-block">Hi User</div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="#"><i data-feather="user"></i> Account</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#"><i data-feather="log-out"></i> Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <div class="main-content container-fluid">
+                <div class="container mx-auto mt-8">
+                    <div class="bg-white shadow rounded">
+                        <div class="p-4 border-b border-gray-200">
+                            <div class="flex justify-between">
+                                <div class="flex space-x-2">
+                                    <div class="flex items-center">
+                                        <p class="text-black-600">All customers</p>
+                                        <span class="mx-2">|</span>
+                                    </div>
+                                    <div class="relative">
+                                        <input type="text"
+                                               class="border border-gray-300 rounded py-2 px-4 leading-tight focus:outline-none focus:border-blue-500"
+                                               placeholder="Search by name">
+                                        <button class="absolute right-0 top-0 mt-2 mr-4">
+                                            <i class="fas fa-search text-gray-400"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                  
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full leading-normal">
+                                <thead>
+                                    <tr>
+                                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            ID
+                                        </th>
+                                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            Customer Name
+                                        </th>
+                                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            Phone Number
+                                        </th>
+                                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            Address
+                                        </th>
+                                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            Total Order
+                                        </th>
+                                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            Total Spending
+                                        </th>
+                                        @if(ViewBag.Role == "Admin")
+                                        {
+                                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                                Actions
+                                            </th>
+                                        }
+                                        
+
+                                        <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                            Details
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var customer in Model.customers)
+                                    {
+                                        <tr>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <span>@customer.CustomerId</span>
+                                        </td>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <span>@customer.Name</span>
+                                        </td>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <span>@customer.PhoneNumber</span>
+                                        </td>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <span>@customer.Address</span>
+                                        </td>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <span>@Model.customerService.calculateTotalOrder(customer.CustomerId)</span>
+                                        </td>
+                                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <span>@Model.customerService.calculateTotalSpend(customer.CustomerId).ToString("C")</span>
+                                        </td>
+                                            @if (ViewBag.Role == "Admin")
+                                            {
+                                                <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                    <a href="#editCustomerModal-@customer.CustomerId"
+                                                       class="edit" data-toggle="modal">
+                                                        <i class="material-icons"
+                                                           data-toggle="tooltip" title="Edit">edit</i>
+                                                    </a>
+                                                    <a href="#deleteCustomerModal-@customer.CustomerId"
+                                                       class="delete" data-toggle="modal">
+                                                        <i class="material-icons"
+                                                           data-toggle="tooltip" title="Delete">&#xE872;</i>
+                                                    </a>
+                                                </td>
+                                            }
+                                            
+                                        <td class="px-5 py-5 border-b border-blue-200 bg-white text-sm">
+                                            <a href="/Customer/@customer.CustomerId">Detail</a>
+                                        </td>
+                                    </tr>
+                                    }
+                                    
+
+                                </tbody>
+                                @foreach(var customer in Model.customers)
+                                {
+                                    <!-- Delete Modal HTML -->
+                                    <div id="deleteCustomerModal-@customer.CustomerId" class="modal fade">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <form action="/Customer/Delete/@customer.CustomerId"
+                                                      method="post">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Delete Customer</h4>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-hidden="true">
+                                                            &times;
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>
+                                                            Are you sure you want to delete <span >@customer.Name</span>?
+                                                        </p>
+                                                        <p class="text-warning">
+                                                            <small>This action cannot be undone.</small>
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <input type="button" class="btn btn-default" data-dismiss="modal"
+                                                               value="Cancel" />
+                                                        <input type="submit"
+                                                               style="background-color: #dc3545; color: #fff; border-color: #dc3545; padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s;"
+                                                               value="Delete"
+                                                               onmouseover="this.style.backgroundColor='#c82333'"
+                                                               onmouseout="this.style.backgroundColor='#dc3545'" />
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                               
+                                @foreach(var customer in Model.customers)
+                                {
+                                      <!-- Modal edit-->
+                                <div
+                                     id="editCustomerModal-@customer.CustomerId" class="modal fade">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content" style="background-color: #fff;">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Customer Information</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form action=" /Customer/Edit/@customer.CustomerId"
+                                                  method="post">
+                                                <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="customerName">Customer Name:</label>
+                                                        <input name="name" type="text" class="form-control"
+                                                               id="customerName" placeholder="Enter customer name"
+                                                               value="@customer.Name">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="phoneNumber">Phone Number:</label>
+                                                        <input name="phoneNumber" type="text" class="form-control"
+                                                               id="phoneNumber" placeholder="Enter phone number"
+                                                               value="@customer.PhoneNumber">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="address">Address:</label>
+                                                        <input name="address" type="text" class="form-control"
+                                                               id="address" placeholder="Enter address"
+                                                               value="@customer.Address">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <input type="button" class="btn btn-default" data-dismiss="modal"
+                                                           value="Cancel" />
+                                                    <input type="submit"
+                                                           style="background-color: #007bff; color: #fff; border: 1px solid #007bff; padding: 10px 20px; border-radius: 5px; transition: background-color 0.3s;"
+                                                           onmouseover="this.style.backgroundColor='#0056b3'; this.style.borderColor='#0056b3'"
+                                                           onmouseout="this.style.backgroundColor='#007bff'; this.style.borderColor='#007bff'"
+                                                           value="Save">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                }
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+                                
+                              
+
+            <footer th:fragment="footer">
+                <!--footer-->
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2023 &copy; THD POS</p>
+                    </div>
+                    <div class="float-end">
+                        <p>
+                            Developed <span class='text-danger'><i data-feather="heart"></i></span> by <a href="#">
+                                GTV
+                                Team
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+        <script src="/js/feather.min.js"></script>
+        <script src="/js/perfect-scrollbar.min.js"></script>
+        <script src="/js/app.js"></script>
+        <script src="/js/Chart.min.js"></script>
+        <script src="/js/apexcharts.min.js"></script>
+        <script src="/js/main.js"></script>
+</body>
+
+</html>

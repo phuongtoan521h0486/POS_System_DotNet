@@ -1,0 +1,1031 @@
+﻿@model POS_System_DotNet.Models.PageModel.DashboardPageModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+    <link rel="stylesheet" href="/css/bootstrap.css">
+
+    <link rel="stylesheet" href="/css/Chart.min.css">
+
+    <link rel="stylesheet" href="/css/perfect-scrollbar.css">
+    <link rel="stylesheet" href="/css/app.css">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+    <!-- Bootstrap Datepicker CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+
+    <!-- Bootstrap Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div id="app">
+        <!--Main content-->
+        <div id="sidebar" class='active' th:fragment="sidebar">
+            <!--sidebar-->
+            <div class="sidebar-wrapper active">
+                <div class="sidebar-header">
+                    <img src="/images/logo.png" alt="" srcset="" style="width: 100%; height: 100%; border-radius: 50%;">
+                </div>
+                <div class="sidebar-menu">
+                    <ul class="menu">
+                        <li class='sidebar-title'>Main Menu</li>
+                        <li class="sidebar-item ">
+                            <a href="/user/dashboard" class='sidebar-link'>
+                                <i data-feather="trending-up" width="20"></i>
+                                <span>Dashboard</span>
+                            </a>
+
+                        </li>
+
+                        <li class="sidebar-item ">
+                            <a href="/user/profile" class='sidebar-link'>
+                                <i data-feather="user" width="20"></i>
+                                <span>Profile</span>
+                            </a>
+
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i data-feather="package" width="20"></i>
+                                <span>Product</span>
+                            </a>
+
+                            <ul class="submenu ">
+                                <li>
+                                    <a href="/product">Product Management</a>
+                                </li>
+                                <li>
+                                    <a href="/product/add">Add Product</a>
+                                </li>
+                            </ul>
+
+                        </li>
+
+
+
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i data-feather="layers" width="20"></i>
+                                <span>Staff</span>
+                            </a>
+
+                            <ul class="submenu ">
+
+                                <li>
+                                    <a href="/user">Staff Management</a>
+                                </li>
+
+                                <li>
+                                    <a href="/user/add">Add Staff</a>
+                                </li>
+
+                            </ul>
+
+                        </li>
+
+                        <li class="sidebar-item  has-sub">
+                            <a href="#" class='sidebar-link'>
+                                <i data-feather="users" width="20"></i>
+                                <span>Customer</span>
+                            </a>
+                            <ul class="submenu ">
+                                <li>
+                                    <a href="/customer">Customer Management</a>
+                                </li>
+                                <li>
+                                    <a href="#">Search For Customer</a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="/" class='sidebar-link'>
+                                <i data-feather="shopping-bag" width="20"></i>
+                                <span>POS</span>
+                            </a>
+
+                        </li>
+
+                        <li class="sidebar-item  ">
+                            <a href="/logout" class='sidebar-link'>
+                                <i data-feather="log-out" width="20"></i>
+                                <span>Logout</span>
+                            </a>
+
+                        </li>
+
+                    </ul>
+                </div>
+                <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+            </div>
+        </div>
+        <div id="main">
+            <!--Content id-->
+            <nav class="navbar navbar-header navbar-expand navbar-light" th:fragment="header">
+                <!--header-->
+                <a class="sidebar-toggler" href="#"><span class="navbar-toggler-icon"></span></a>
+                <button class="btn navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav d-flex align-items-center navbar-light ms-auto">
+                        <li class="dropdown">
+                            <a href="#" data-bs-toggle="dropdown"
+                               class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                                <div class="avatar me-1">
+                                    @if(Model.picture != null)
+                                    {
+                                        <img src="data:image/png;base64,@Convert.ToBase64String(Model.picture)"
+                                        alt="User Picture" />
+                                    }
+                                    else
+                                    {
+                                        <img  src="/images/avatar-default.svg"
+                                             alt="Default Avatar" />
+                                    }
+                                    
+
+                                </div>
+                                <div class="d-none d-md-block d-lg-inline-block"
+                                     >Hi @Model.name</div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <a class="dropdown-item" href="/user/profile"><i data-feather="user"></i> Account</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/logout"><i data-feather="log-out"></i> Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="main-content container-fluid">
+                <div class="page-title">
+                    <h3>Dashboard </h3>
+                </div>
+                <section class="section">
+                    <div class="row mb-2">
+                        <div class="col-12 col-md-3">
+                            <div class="card card-statistic">
+                                <div class="card-body p-0">
+                                    <div class="d-flex flex-column">
+                                        <div class='px-3 py-3 d-flex justify-content-between'>
+                                            <h3 class='card-title'>ORDERS</h3> <!-- total of total amount-->
+                                            <div class="card-right d-flex align-items-center">
+                                                <p>@Model.service.getSize(Model.startDate, Model.endDate)</p>
+                                            </div>
+                                        </div>
+                                        <div class="chart-wrapper">
+                                            <canvas id="canvas1" style="height:100px !important"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="card card-statistic">
+                                <div class="card-body p-0">
+                                    <div class="d-flex flex-column">
+                                        <div class='px-3 py-3 d-flex justify-content-between'>
+                                            <h3 class='card-title'>PRODUCT</h3>
+                                            <div class="card-right d-flex align-items-center">
+                                                <p>@Model.service.getTotalProduct(Model.startDate, Model.endDate)</p>
+                                            </div>
+                                        </div>
+                                        <div class="chart-wrapper">
+                                            <canvas id="canvas2" style="height:100px !important"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="card card-statistic">
+                                <div class="card-body p-0">
+                                    <div class="d-flex flex-column">
+                                        <div class='px-3 py-3 d-flex justify-content-between'>
+                                            <h3 class='card-title'>REVENUE</h3>
+                                            <div class="card-right d-flex align-items-center">
+                                                <p>@Model.service.getRevenue(Model.startDate, Model.endDate).ToString("C")</p>
+                                            </div>
+                                        </div>
+                                        <div class="chart-wrapper">
+                                            <canvas id="canvas3" style="height:100px !important"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-3">
+                            <div class="card card-statistic">
+                                <div class="card-body p-0">
+                                    <div class="d-flex flex-column">
+                                        <div class='px-3 py-3 d-flex justify-content-between'>
+                                            <h3 class='card-title'>PROFIT</h3>
+                                            <div class="card-right d-flex align-items-center">
+                                                @if (Model.accountService.findAccountById(Model.accountId).Role == "Admin")
+                                                {
+                                                    <p>@Model.service.getProfit(Model.startDate, Model.endDate).ToString("C")</p>
+                                                }
+                                                else
+                                                {
+                                                    <p><i class="fas fa-eye-slash"></i></p>
+                                                }
+
+                                            </div>
+                                        </div>
+                                        <div class="chart-wrapper">
+                                            <canvas id="canvas4" style="height:100px !important"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <form onsubmit="return validateDateRange()">
+                            <div class="form-row">
+                                <div class="col-md-3 form-group"
+                                     style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+                                    <label for="startDate">Form </label>
+                                    <input type="text" class="form-control" id="startDate" name="startDate"
+                                           placeholder="Select From Date" autocomplete="off">
+                                </div>
+                                <div class="col-md-3 form-group"
+                                     style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+                                    <label for="endDate">To </label>
+                                    <input type="text" class="form-control" id="endDate" name="endDate"
+                                           placeholder="Select To Date" autocomplete="off">
+                                </div>
+                                <div class="col-md-4 form-group">
+                                    <div class="btn-group" role="group" aria-label="Date Buttons">
+                                        <button type="button" class="btn btn-primary"
+                                                onclick="setDateRange('today')">
+                                            Today
+                                        </button>
+                                        <button type="button" class="btn btn-primary"
+                                                onclick="setDateRange('yesterday')">
+                                            Yesterday
+                                        </button>
+                                        <button type="button" class="btn btn-primary"
+                                                onclick="setDateRange('last7days')">
+                                            Last 7 Days
+                                        </button>
+                                        <button type="button" class="btn btn-primary"
+                                                onclick="setDateRange('thismonth')">
+                                            This Month
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 form-group">
+                                    <button type="submit" class="btn btn-success">Apply</button>
+                                </div>
+                            </div>
+
+                        </form>
+
+
+
+                    </div>
+
+
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="card d-flex flex-column h-100">
+                                <div class="card-header">
+                                    <h3 class='card-heading p-1 pl-3'>Cross Revenue</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12 col-12">
+                                            <canvas id="bar"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card d-flex flex-column h-100">
+                                <div class="card-header">
+                                    <h4>Your Earnings</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div id="radialBars"></div>
+                                    <div class="text-center mb-5">
+                                        <h6>From last month</h6>
+                                        <h1 class='text-green'>+$2,134</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4 class="card-title">Orders</h4>
+                    </div>
+                    <div class="card-body px-0 pb-0">
+                        <div class="table-responsive">
+                            <table class='table mb-0' id="table1">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Order Date</th>
+                                        <th>Total Amount</th>
+                                        <th>Items</th>
+                                        <th>Customer</th>
+                                        <th>Process By</th>
+                                        <th>Detail</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach(var order in Model.service.getOrdersFromRange(Model.startDate, Model.endDate))
+                                    {
+                                        <tr>
+                                            <td>@order.OrderId</td>
+                                            <td>@order.OrderDate.ToShortDateString()</td>
+                                            <td>@order.TotalAmount.ToString("C")</td>
+                                            <td>@order.Quantity</td>
+                                            <td>
+                                                @Model.customerService.getCustomerbyId(order.CustomerId).Name
+                                            </td>
+                                            <td>
+                                                @Model.accountService.findAccountById(order.AccountId).FullName
+                                            </td>
+                                            <td>
+                                                <a href="
+                                                /customer/@order.CustomerId/invoice/@order.OrderId">
+                                                    <i class="material-icons">picture_as_pdf</i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer th:fragment="footer">
+                <!--footer-->
+                <div class="footer clearfix mb-0 text-muted">
+                    <div class="float-start">
+                        <p>2023 &copy; THD POS</p>
+                    </div>
+                    <div class="float-end">
+                        <p>
+                            Developed <span class='text-danger'><i data-feather="heart"></i></span> by <a href="#">
+                                GTV
+                                Team
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    <script src="/script.js"></script>
+    <script src="/js/feather.min.js"></script>
+    <script src="/js/perfect-scrollbar.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/Chart.min.js"></script>
+    <script src="/js/apexcharts.min.js"></script>
+    <script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var today = new Date();
+            $('#startDate,#endDate').datepicker({
+                format: 'MM/dd/yyyy',
+                autoclose: true,
+                todayHighlight: true
+            }).datepicker('setDate', today);
+
+        });
+
+        function validateDateRange() {
+            var fromDate = $('#startDate').datepicker('getDate');
+            var toDate = $('#endDate').datepicker('getDate');
+
+            if (fromDate && toDate && fromDate > toDate) {
+                alert('Invalid date range. "From" date should be less than or equal to "To" date.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function setDateRange(range) {
+            var today = new Date();
+            var startDate, endDate;
+
+            switch (range) {
+                case 'today':
+                    startDate = today;
+                    endDate = today;
+                    break;
+                case 'yesterday':
+                    endDate = today;
+                    today.setDate(today.getDate() - 1);
+                    startDate = today;
+                    break;
+                case 'last7days':
+                    startDate = new Date(today);
+                    startDate.setDate(today.getDate() - 6);
+                    endDate = today;
+                    break;
+                case 'thismonth':
+                    startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                    endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+                    break;
+            }
+
+            $('#startDate').datepicker('setDate', startDate);
+            $('#endDate').datepicker('setDate', endDate);
+        }
+    </script>
+    <script>
+
+        function getURLParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const month = date.getMonth() + 1; // Months are zero-based
+            const day = date.getDate();
+            const year = date.getFullYear();
+
+            // Pad single-digit month and day with leading zero
+            const formattedDate = `${month.toString().padStart(2, '0')}/${day.toString().padStart(2, '0')}/${year}`;
+
+            return formattedDate;
+        }
+        function getDatesBetween(startDate, endDate) {
+            const dates = [];
+            const currentDate = new Date(startDate);
+            const lastDate = new Date(endDate);
+
+            while (currentDate <= lastDate) {
+                dates.push(formatDate(currentDate));
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+
+            return dates;
+        }
+        function generateColors(length) {
+            const chartColors = {
+                info: '#41B1F9',
+            };
+            const backgroundColor = Array.from({ length }, () => chartColors.info);
+            return backgroundColor;
+        }
+
+        const startDateParam = getURLParameter('startDate') ?? formatDate(new Date());
+        const endDateParam = getURLParameter('endDate') ?? formatDate(new Date());
+
+        const formattedStartDate = formatDate(startDateParam);
+        const formattedEndDate = formatDate(endDateParam);
+
+        const labels = getDatesBetween(formattedStartDate, formattedEndDate);
+
+        console.log(JSON.stringify({
+            startDate: formattedStartDate,
+            endDate: formattedEndDate,
+        }))
+
+        var barchartData = [];
+        fetch('/dashboard/getDataBarChart?startDate=' + formattedStartDate + '&endDate=' + formattedEndDate, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                barchartData = data;
+                console.log(Math.max(...barchartData))
+                console.log(barchartData)
+                var ctxBar = document.getElementById("bar").getContext("2d");
+                var myBar = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: getDatesBetween(formattedStartDate, formattedEndDate),
+                        datasets: [{
+                            label: 'Cross Revenue',
+                            backgroundColor: generateColors(labels.length),
+                            data: barchartData
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        barRoundness: 1,
+                        title: {
+                            display: false,
+                            text: "Bar Chart"
+                        },
+                        legend: {
+                            display: false
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true,
+                                    suggestedMax: Math.max(...barchartData) + 20,
+                                    padding: 10,
+                                },
+                                gridLines: {
+                                    drawBorder: false,
+                                }
+                            }],
+                            xAxes: [{
+                                gridLines: {
+                                    display: false,
+                                    drawBorder: false
+                                }
+                            }]
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+
+        var chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            info: '#41B1F9',
+            blue: '#3245D1',
+            purple: 'rgb(153, 102, 255)',
+            grey: '#EBEFF6'
+        };
+
+        var config1 = {
+            type: "line",
+            data: {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [
+                    {
+                        label: "Balance",
+                        backgroundColor: "#fff",
+                        borderColor: "#fff",
+                        data: [20, 40, 20, 70, 10, 50, 20],
+                        fill: false,
+                        pointBorderWidth: 100,
+                        pointBorderColor: "transparent",
+                        pointRadius: 3,
+                        pointBackgroundColor: "transparent",
+                        pointHoverBackgroundColor: "rgba(63,82,227,1)",
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: -10,
+                        top: 10,
+                    },
+                },
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: false,
+                },
+                tooltips: {
+                    mode: "index",
+                    intersect: false,
+                },
+                hover: {
+                    mode: "nearest",
+                    intersect: true,
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            gridLines: {
+                                drawBorder: false,
+                                display: false,
+                            },
+                            ticks: {
+                                display: false,
+                            },
+                        },
+                    ],
+                    yAxes: [
+                        {
+                            gridLines: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                display: false,
+                            },
+                        },
+                    ],
+                },
+            },
+        };
+        var config2 = {
+            type: "line",
+            data: {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [
+                    {
+                        label: "Revenue",
+                        backgroundColor: "#fff",
+                        borderColor: "#fff",
+                        data: [20, 800, 300, 400, 10, 50, 20],
+                        fill: false,
+                        pointBorderWidth: 100,
+                        pointBorderColor: "transparent",
+                        pointRadius: 3,
+                        pointBackgroundColor: "transparent",
+                        pointHoverBackgroundColor: "rgba(63,82,227,1)",
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: -10,
+                        top: 10,
+                    },
+                },
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: false,
+                },
+                tooltips: {
+                    mode: "index",
+                    intersect: false,
+                },
+                hover: {
+                    mode: "nearest",
+                    intersect: true,
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            gridLines: {
+                                drawBorder: false,
+                                display: false,
+                            },
+                            ticks: {
+                                display: false,
+                            },
+                        },
+                    ],
+                    yAxes: [
+                        {
+                            gridLines: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                display: false,
+                            },
+                        },
+                    ],
+                },
+            },
+        };
+        var config3 = {
+            type: "line",
+            data: {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [
+                    {
+                        label: "Orders",
+                        backgroundColor: "#fff",
+                        borderColor: "#fff",
+                        data: [20, 40, 20, 200, 10, 540, 723],
+                        fill: false,
+                        pointBorderWidth: 100,
+                        pointBorderColor: "transparent",
+                        pointRadius: 3,
+                        pointBackgroundColor: "transparent",
+                        pointHoverBackgroundColor: "rgba(63,82,227,1)",
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: -10,
+                        top: 10,
+                    },
+                },
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: false,
+                    text: "Chart.js Line Chart",
+                },
+                tooltips: {
+                    mode: "index",
+                    intersect: false,
+                },
+                hover: {
+                    mode: "nearest",
+                    intersect: true,
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            gridLines: {
+                                drawBorder: false,
+                                display: false,
+                            },
+                            ticks: {
+                                display: false,
+                            },
+                        },
+                    ],
+                    yAxes: [
+                        {
+                            gridLines: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                display: false,
+                            },
+                        },
+                    ],
+                },
+            },
+        };
+        var config4 = {
+            type: "line",
+            data: {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [
+                    {
+                        label: "My First dataset",
+                        backgroundColor: "#fff",
+                        borderColor: "#fff",
+                        data: [20, 40, 20, 70, 10, 5, 23],
+                        fill: false,
+                        pointBorderWidth: 100,
+                        pointBorderColor: "transparent",
+                        pointRadius: 3,
+                        pointBackgroundColor: "transparent",
+                        pointHoverBackgroundColor: "rgba(63,82,227,1)",
+                    },
+                ],
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                layout: {
+                    padding: {
+                        left: -10,
+                        top: 10,
+                    },
+                },
+                legend: {
+                    display: false,
+                },
+                title: {
+                    display: false,
+                    text: "Chart.js Line Chart",
+                },
+                tooltips: {
+                    mode: "index",
+                    intersect: false,
+                },
+                hover: {
+                    mode: "nearest",
+                    intersect: true,
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            gridLines: {
+                                drawBorder: false,
+                                display: false,
+                            },
+                            ticks: {
+                                display: false,
+                            },
+                        },
+                    ],
+                    yAxes: [
+                        {
+                            gridLines: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                display: false,
+                            },
+                        },
+                    ],
+                },
+            },
+        };
+
+        var randomScalingFactor = function () {
+            return (Math.random() > 0.5 ? 1.0 : 1.0) * Math.round(Math.random() * 100);
+        };
+
+        // draws a rectangle with a rounded top
+        Chart.helpers.drawRoundedTopRectangle = function (ctx, x, y, width, height, radius) {
+            ctx.beginPath();
+            ctx.moveTo(x + radius, y);
+            // top right corner
+            ctx.lineTo(x + width - radius, y);
+            ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            // bottom right	corner
+            ctx.lineTo(x + width, y + height);
+            // bottom left corner
+            ctx.lineTo(x, y + height);
+            // top left
+            ctx.lineTo(x, y + radius);
+            ctx.quadraticCurveTo(x, y, x + radius, y);
+            ctx.closePath();
+        };
+
+        Chart.elements.RoundedTopRectangle = Chart.elements.Rectangle.extend({
+            draw: function () {
+                var ctx = this._chart.ctx;
+                var vm = this._view;
+                var left, right, top, bottom, signX, signY, borderSkipped;
+                var borderWidth = vm.borderWidth;
+
+                if (!vm.horizontal) {
+                    // bar
+                    left = vm.x - vm.width / 2;
+                    right = vm.x + vm.width / 2;
+                    top = vm.y;
+                    bottom = vm.base;
+                    signX = 1;
+                    signY = bottom > top ? 1 : -1;
+                    borderSkipped = vm.borderSkipped || 'bottom';
+                } else {
+                    // horizontal bar
+                    left = vm.base;
+                    right = vm.x;
+                    top = vm.y - vm.height / 2;
+                    bottom = vm.y + vm.height / 2;
+                    signX = right > left ? 1 : -1;
+                    signY = 1;
+                    borderSkipped = vm.borderSkipped || 'left';
+                }
+
+                // Canvas doesn't allow us to stroke inside the width so we can
+                // adjust the sizes to fit if we're setting a stroke on the line
+                if (borderWidth) {
+                    // borderWidth shold be less than bar width and bar height.
+                    var barSize = Math.min(Math.abs(left - right), Math.abs(top - bottom));
+                    borderWidth = borderWidth > barSize ? barSize : borderWidth;
+                    var halfStroke = borderWidth / 2;
+                    // Adjust borderWidth when bar top position is near vm.base(zero).
+                    var borderLeft = left + (borderSkipped !== 'left' ? halfStroke * signX : 0);
+                    var borderRight = right + (borderSkipped !== 'right' ? -halfStroke * signX : 0);
+                    var borderTop = top + (borderSkipped !== 'top' ? halfStroke * signY : 0);
+                    var borderBottom = bottom + (borderSkipped !== 'bottom' ? -halfStroke * signY : 0);
+                    // not become a vertical line?
+                    if (borderLeft !== borderRight) {
+                        top = borderTop;
+                        bottom = borderBottom;
+                    }
+                    // not become a horizontal line?
+                    if (borderTop !== borderBottom) {
+                        left = borderLeft;
+                        right = borderRight;
+                    }
+                }
+
+                // calculate the bar width and roundess
+                var barWidth = Math.abs(left - right);
+                var roundness = this._chart.config.options.barRoundness || 0.5;
+                var radius = barWidth * roundness * 0.5;
+
+                // keep track of the original top of the bar
+                var prevTop = top;
+
+                // move the top down so there is room to draw the rounded top
+                top = prevTop + radius;
+                var barRadius = top - prevTop;
+
+                ctx.beginPath();
+                ctx.fillStyle = vm.backgroundColor;
+                ctx.strokeStyle = vm.borderColor;
+                ctx.lineWidth = borderWidth;
+
+                // draw the rounded top rectangle
+                Chart.helpers.drawRoundedTopRectangle(ctx, left, (top - barRadius + 1), barWidth, bottom - prevTop, barRadius);
+
+                ctx.fill();
+                if (borderWidth) {
+                    ctx.stroke();
+                }
+
+                // restore the original top value so tooltips and scales still work
+                top = prevTop;
+            },
+        });
+
+        Chart.defaults.roundedBar = Chart.helpers.clone(Chart.defaults.bar);
+
+        Chart.controllers.roundedBar = Chart.controllers.bar.extend({
+            dataElementType: Chart.elements.RoundedTopRectangle
+        });
+
+
+
+        var radialBarsOptions = {
+            series: [44, 80, 67],
+            chart: {
+                height: 350,
+                type: "radialBar",
+            },
+            theme: {
+                mode: "light",
+                palette: "palette1",
+                monochrome: {
+                    enabled: true,
+                    color: "#3245D1",
+                    shadeTo: "light",
+                    shadeIntensity: 0.65,
+                },
+            },
+            plotOptions: {
+                radialBar: {
+                    dataLabels: {
+                        name: {
+                            offsetY: -15,
+                            fontSize: "22px",
+                        },
+                        value: {
+                            fontSize: "2.5rem",
+                        },
+                        total: {
+                            show: true,
+                            label: "Earnings",
+                            color: "#25A6F1",
+                            fontSize: "16px",
+                            formatter: function (w) {
+                                // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+                                return "$4,124";
+                            },
+                        },
+                    },
+                },
+            },
+            labels: ["Apples", "Oranges", "Bananas", "Berries"],
+        }; // radial chart ne
+        var radialBars = new ApexCharts(document.querySelector("#radialBars"), radialBarsOptions);
+        radialBars.render();
+
+        let ctx1 = document.getElementById("canvas1").getContext("2d"); // balance
+        let ctx2 = document.getElementById("canvas2").getContext("2d"); // revenue
+        let ctx3 = document.getElementById("canvas3").getContext("2d"); // orders
+        let ctx4 = document.getElementById("canvas4").getContext("2d"); // sales
+        var lineChart1 = new Chart(ctx1, config1);
+        var lineChart2 = new Chart(ctx2, config2);
+        var lineChart3 = new Chart(ctx3, config3);
+        var lineChart4 = new Chart(ctx4, config4);
+
+    </script>
+  
+</body>
+
+</html>

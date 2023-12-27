@@ -1,0 +1,371 @@
+﻿@model POS_System_DotNet.Models.Product.Product
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<!DOCTYPE html>
+<!-- Coding By CodingNepal - codingnepalweb.com -->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/bootstrap.css">
+
+    <link rel="stylesheet" href="/css/Chart.min.css">
+
+    <link rel="stylesheet" href="/css/perfect-scrollbar.css">
+    <link rel="stylesheet" href="/css/app.css">
+
+   <style>
+        /* Add your styles here */
+        #default-section {
+            display: block;
+        }
+
+        #uploaded-image {
+            max-width: 100%;
+            max-height: 200px;
+            /* Set a maximum height for the displayed image */
+        }
+
+        .drag-over {
+            border-color: #4F46E5;
+            /* Change border color when dragging over */
+        }
+    </style>
+    <title>Add Product</title>
+</head>
+
+<body>
+    <div id="app">
+    <!--Main content-->
+    <div id="sidebar" class='active' th:fragment="sidebar">
+        <!--sidebar-->
+        <div class="sidebar-wrapper active">
+            <div class="sidebar-header">
+                <img src="/images/logo.png" alt="" srcset="" style="width: 100%; height: 100%; border-radius: 50%;">
+            </div>
+            <div class="sidebar-menu">
+                <ul class="menu">
+                    <li class='sidebar-title'>Main Menu</li>
+                    <li class="sidebar-item ">
+                        <a href="/user/dashboard" class='sidebar-link'>
+                            <i data-feather="trending-up" width="20"></i>
+                            <span>Dashboard</span>
+                        </a>
+
+                    </li>
+
+                    <li class="sidebar-item ">
+                        <a href="/user/profile" class='sidebar-link'>
+                            <i data-feather="user" width="20"></i>
+                            <span>Profile</span>
+                        </a>
+
+                    </li>
+
+                    <li class="sidebar-item  has-sub">
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="package" width="20"></i>
+                            <span>Product</span>
+                        </a>
+
+                        <ul class="submenu ">
+                            <li>
+                                <a href="/product">Product Management</a>
+                            </li>
+                            <li>
+                                <a href="/product/add">Add Product</a>
+                            </li>
+                        </ul>
+
+                    </li>
+
+
+
+
+                    <li class="sidebar-item  has-sub">
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="layers" width="20"></i>
+                            <span>Staff</span>
+                        </a>
+
+                        <ul class="submenu ">
+
+                            <li>
+                                <a href="/user">Staff Management</a>
+                            </li>
+
+                            <li>
+                                <a href="/user/add">Add Staff</a>
+                            </li>
+
+                        </ul>
+
+                    </li>
+
+                    <li class="sidebar-item  has-sub">
+                        <a href="#" class='sidebar-link'>
+                            <i data-feather="users" width="20"></i>
+                            <span>Customer</span>
+                        </a>
+                        <ul class="submenu ">
+                            <li>
+                                <a href="/customer">Customer Management</a>
+                            </li>
+                            <li>
+                                <a href="#">Search For Customer</a>
+                            </li>
+                        </ul>
+                    </li>
+
+
+                    <li class="sidebar-item  ">
+                        <a href="/" class='sidebar-link'>
+                            <i data-feather="shopping-bag" width="20"></i>
+                            <span>POS</span>
+                        </a>
+
+                    </li>
+
+                    <li class="sidebar-item  ">
+                        <a href="/logout" class='sidebar-link'>
+                            <i data-feather="log-out" width="20"></i>
+                            <span>Logout</span>
+                        </a>
+
+                    </li>
+
+                </ul>
+            </div>
+            <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+        </div>
+    </div>
+    <div id="main">
+        <!--Content id-->
+        <nav class="navbar navbar-header navbar-expand navbar-light" th:fragment="header">
+            <!--header-->
+            <a class="sidebar-toggler" href="#"><span class="navbar-toggler-icon"></span></a>
+            <button class="btn navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav d-flex align-items-center navbar-light ms-auto">
+                    <li class="dropdown">
+                        <a href="#" data-bs-toggle="dropdown"
+                            class="nav-link dropdown-toggle nav-link-lg nav-link-user">
+                            <div class="avatar me-1">
+                                <img src="" alt="" srcset="">
+                            </div>
+                            <div class="d-none d-md-block d-lg-inline-block">Hi User</div>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item" href="#"><i data-feather="user"></i> Account</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#"><i data-feather="log-out"></i> Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="main-content container-fluid">
+            <section class="dashboard-light">
+                <div class="flex items-center space-x-2">
+                    <a href="/Product" class="text-sm text-blue-600 hover:underline">
+                        Back to product
+                        listing
+                    </a>
+                </div>
+                <form action="/Product/Edit" method="POST" enctype="multipart/form-data">
+                    <input name="productId" type="text" class="form-control" required
+                            value="@Model.ProductId" hidden="hidden">
+                    <div class="shadow sm:rounded-md sm:overflow-hidden">
+                        <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                            <div class="grid grid-cols-3 gap-6">
+                                <div class="col-span-3">
+                                    <label for="productName" class="block text-sm font-medium text-gray-700">
+                                        Product name
+                                    </label>
+                                    <input value="@Model.ProductName" type="text" name="productName"
+                                            id="productName"
+                                            class="input-text focus:ring-indigo-500 focus:border-indigo-500 flex-1 block w-full rounded-md sm:text-sm border-gray-300 border p-3"
+                                            placeholder="Enter product name">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-6">
+                                <div class="col-span-3">
+                                    <label for="barcode" class="block text-sm font-medium text-gray-700">
+                                        Barcode
+                                    </label>
+                                    <input value="@Model.Barcode" type="text" name="barcode" id="barcode"
+                                            class="input-text focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-3"
+                                            placeholder="Enter manually or use a machine to scan barcodes. (3-15 char)">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-6">
+                                <div class="col-span-3 sm:col-span-1">
+                                    <label for="retailPrice" class="block text-sm font-medium text-gray-700">
+                                        Retail Price
+                                    </label>
+                                    <input value="@Model.RetailPrice" type="text" name="retailPrice"
+                                            id="retailPrice"
+                                            class="input-text focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-3"
+                                            placeholder="Enter retail price">
+                                </div>
+                                <div class="col-span-3 sm:col-span-1">
+                                    <label for="importPrice" class="block text-sm font-medium text-gray-700">
+                                        Import Price
+                                    </label>
+                                        <input value="@Model.ImportPrice" type="text" name="importPrice"
+                                            id="importPrice"
+                                            class="input-text focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-3"
+                                            placeholder="Enter import price">
+                                </div>
+                                <div class="col-span-3 sm:col-span-1">
+                                    <label for="category" class="block text-sm font-medium text-gray-700">
+                                        Category
+                                    </label>
+                                        <input value="@Model.Category" type="text" name="category" id="category"
+                                            class="input-text focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-3"
+                                            placeholder="Enter category">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">
+                                    Product photo
+                                </label>
+                                <div id="upload-section"
+                                        class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md"
+                                        ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)"
+                                        ondrop="handleDrop(event)">
+                                    <div class="space-y-1 text-center">
+                                            @if (Model.Picture != null)
+                                            {
+                                                <img id="uploaded-image"
+                                                     src="data:image/png;base64,@Convert.ToBase64String(Model.Picture)"
+                                                     alt="Uploaded Image" class="mx-auto"/>
+                                            }
+
+                                            
+
+                                        <div class="flex text-sm text-gray-600">
+                                            <label for="picture"
+                                                    class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                                <span>Upload a file</span>
+                                                <input id="picture" name="picture" accept="image/*" type="file"
+                                                        class="sr-only" onchange="displayImage()">
+                                            </label>
+                                            <p class="pl-1">or drag and drop</p>
+                                        </div>
+
+                                        <p class="text-xs text-gray-500">
+                                            PNG, JPG, GIF up to 10MB
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+                            <button type="submit"
+                                    class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                Save
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </section>
+        </div>
+        <footer th:fragment="footer">
+            <!--footer-->
+            <div class="footer clearfix mb-0 text-muted">
+                <div class="float-start">
+                    <p>2023 &copy; THD POS</p>
+                </div>
+                <div class="float-end">
+                    <p>
+                        Developed <span class='text-danger'><i data-feather="heart"></i></span> by <a href="#">
+                            GTV
+                            Team
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+
+    <script src="/script.js">
+
+    </script>
+     <script>
+        function displayImage() {
+            //var uploadSection = document.getElementById('upload-section');
+            var defaultSection = document.getElementById('default-section');
+            var input = document.getElementById('picture');
+            var image = document.getElementById('uploaded-image');
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    image.src = e.target.result;
+                    image.style.display = 'block'; // Show the uploaded image
+                    defaultSection.style.display = 'none'; // Hide the upload section
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+            var uploadSection = document.getElementById('upload-section');
+            uploadSection.style.borderStyle = 'dashed'; // Add dashed border when dragging over
+            uploadSection.classList.add('drag-over');
+        }
+
+        function handleDragLeave(event) {
+            event.preventDefault();
+            var uploadSection = document.getElementById('upload-section');
+            uploadSection.style.borderStyle = 'none'; // Remove border when dragging leaves
+            uploadSection.classList.remove('drag-over');
+        }
+
+        function handleDrop(event) {
+            event.preventDefault();
+            var uploadSection = document.getElementById('upload-section');
+            var files = event.dataTransfer.files;
+
+            // Handle dropped files as if they were selected via file input
+            document.getElementById('picture').files = files;
+
+            // Trigger the displayImage function
+            displayImage();
+
+            // Reset border style and remove drag-over class
+            uploadSection.style.borderStyle = 'none';
+            uploadSection.classList.remove('drag-over');
+        }
+    </script>
+    <script src="/js/feather.min.js"></script>
+    <script src="/js/perfect-scrollbar.min.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/Chart.min.js"></script>
+    <script src="/js/apexcharts.min.js"></script>
+    <script src="/js/main.js"></script>
+</body>
+
+</html>
