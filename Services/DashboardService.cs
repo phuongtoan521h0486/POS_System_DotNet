@@ -109,7 +109,7 @@ namespace POS_System_DotNet.Services
                 var barChartData = ct.Orders
                 .Where(o => o.OrderDate.Date == startDate)
                 .GroupBy(o => o.OrderDate.Date)
-                
+
                 .Select(group => new
                 {
                     Date = group.Key,
@@ -122,21 +122,47 @@ namespace POS_System_DotNet.Services
                 return result;
             } else
             {
-                var barChartData = ct.Orders
-                .Where(o => o.OrderDate.Date >= startDate && o.OrderDate.Date < endDate)
-                .GroupBy(o => o.OrderDate.Date)
-                .Select(group => new
-                {
-                    Date = group.Key,
-                    TotalAmount = group.Sum(o => o.TotalAmount)
-                })
-                .OrderBy(entry => entry.Date)
-                .ToList();
+                var dateRange = GetAllDatesBetween(startDate.Value, endDate.Value);
 
-                var result = barChartData.Select(entry => entry.TotalAmount).ToList();
+                var barChartData = ct.Orders
+                    .Where(o => o.OrderDate.Date >= startDate && o.OrderDate.Date < endDate)
+                    .GroupBy(o => o.OrderDate.Date)
+                    .Select(group => new
+                    {
+                        Date = group.Key,
+                        TotalAmount = group.Sum(o => o.TotalAmount)
+                    })
+                    .OrderBy(entry => entry.Date)
+                    .ToList();
+
+                var result = dateRange
+                    .GroupJoin(barChartData,
+                        date => date,
+                        chartData => chartData.Date,
+                        (date, chartData) => new
+                        {
+                            Date = date,
+                            TotalAmount = chartData.Sum(data => data.TotalAmount)
+                        })
+                    .OrderBy(entry => entry.Date)
+                    .Select(entry => entry.TotalAmount)
+                    .ToList();
 
                 return result;
-            }  
+            }
+        }
+        private List<DateTime> GetAllDatesBetween(DateTime startDate, DateTime endDate)
+        {
+            var dateList = new List<DateTime>();
+            DateTime currentDate = startDate.Date;
+
+            while (currentDate <= endDate.Date)
+            {
+                dateList.Add(currentDate);
+                currentDate = currentDate.AddDays(1);
+            }
+
+            return dateList;
         }
     }
     public static class DateRangeChecker
